@@ -7,11 +7,10 @@ from skimage.transform import resize
 import requests
 from io import BytesIO
 import urllib.request
-import urllib3
+# import urllib3
 
 
 import tensorflow.keras as keras
-
 
 
 MODEL_PATH = os.path.join(settings.BASE_DIR, 'classifier/ml/malaria.h5')
@@ -20,7 +19,7 @@ classes = ['Parasitized', 'Uninfected']
 # Load your trained model
 malaria_model = keras.models.load_model(MODEL_PATH)
 print(MODEL_PATH)
-malaria_model._make_predict_function()
+malaria_model.make_predict_function()
 #
 #
 # def model_predict(img_path):
@@ -48,7 +47,7 @@ malaria_model._make_predict_function()
 # print(h)
 
 def model_predict(img_url):
-    with urllib.request.urlopen(img_url) as response:
+    with urllib.request.urlopen('file://' + img_url) as response:
         img_raw = response
         img = plt.imread(img_raw)
         img = resize(img, (64, 64, 3))
@@ -56,7 +55,6 @@ def model_predict(img_url):
         preds = malaria_model.predict(img)
 
         return preds
-
 
 
 def img_dl(img_url):
